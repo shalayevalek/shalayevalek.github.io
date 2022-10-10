@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+	<script>
+	document.addEventListener("DOMContentLoaded", () => {	
+		
+		console.log('loaded');
+		
+		
+		document.querySelector('#bubble_butt').addEventListener('click',function(){
+		
+			const navbardivs = document.querySelector('nav').querySelectorAll('div');
+			element = document.querySelector('#bubble_butt');
+			
+			navbardivs.forEach(item => {
+			item.style.borderStyle = 'outset';
+			})
+			
+			element.style.borderStyle = 'inset';
+			
+			document.querySelector('#bubble-article').style.display = 'block';
+			document.querySelector('#sortalg').style.display = 'block';
+			
+		});
+		document.querySelector('#insert_butt').addEventListener('click',function(){
+		
+			const navbardivs = document.querySelector('nav').querySelectorAll('div');
+			element = document.querySelector('#insert_butt');
+			
+			navbardivs.forEach(item => {
+			item.style.borderStyle = 'outset';
+			})
+			
+			element.style.borderStyle = 'inset';
+			
+			
+			document.querySelector('#sortalg').style.display = 'none';
+			document.querySelector('#bubble-article').style.display = 'none';
+			
+		});
+		
+		
+		})
+/*		
+	function init() {
+	window.requestAnimationFrame(draw);
+	}
+*/	
+
+		let Column = class{
+		constructor(height, width, x, y)
+			{
+				this.height = height;
+				this.width = width;
+				this.x = x;
+				this.y = y;
+			}
+			set(height, width, x, y)
+			{
+				this.height = height;
+				this.width = width;
+				this.x = x;
+				this.y = y;
+			}
+			
+		}
+		
+		canvas_height = 300;
+		canvas_width = 600;
+		
+		let anim_start = 1;
+		let col_count = 128;
+		col_height = canvas_height/col_count;
+		let iteration = col_count - 1;
+		let j = 1;
+		let temp = 0, temp_i = 0;;
+		
+		let arrColumn = {};
+		
+		for (let i = 0; i < col_count; i++) {
+			arrColumn[i] = new Column((col_height*i),(canvas_width/1.1/col_count),(((canvas_width/col_count)*i)-10), 10);
+			console.log("new column made - i:", i, "arrColumn[i].x", arrColumn[i].x, "arrColumn[i].y", arrColumn[i].y, "arrColumn[i].height:", arrColumn[i].height);
+			}
+			
+		for(let i = 0; i < col_count; i++){
+			temp_i = Math.floor(Math.random() * col_count);
+			temp = arrColumn[i].height;
+			//console.log("swap:", temp, arrColumn[i].height, arrColumn[Math.floor(Math.random() * col_count)].height);
+			arrColumn[i].height = arrColumn[temp_i].height;
+			arrColumn[temp_i].height = temp;
+			temp_i = 0;
+			temp = 0;
+		}	
+
+	function draw() {
+		const ctx = document.getElementById('canvas').getContext('2d');
+		
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
+		
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		console.log("called for clearRect()")
+		
+		ctx.translate(5, canvas.height);
+		
+		ctx.beginPath();
+		ctx.fillStyle = 'black';
+		
+		for (let i = 0; i < col_count; i++) {
+			//console.log("drew a column - i:", i, "arrColumn[i].x:", arrColumn[i].x, "arrColumn[i].y:", arrColumn[i].y, "arrColumn[i].height:", arrColumn[i].height);
+			ctx.fillRect(arrColumn[i].x, -arrColumn[i].height, arrColumn[i].width, arrColumn[i].height);
+			/*ctx.translate(((width-10)/col_count),0)*/
+			} 
+			
+		ctx.closePath();	
+		
+		if(iteration>0){
+			if(j==iteration+1){
+			iteration--;
+			j = 1;
+			}
+			if(arrColumn[j-1].height>arrColumn[j].height){
+				temp = arrColumn[j-1].height;
+				arrColumn[j-1].height = arrColumn[j].height;
+				arrColumn[j].height = temp;
+				
+				}
+			j++;
+			}
+		if(iteration == 0)
+			clearInterval(window.myTimer);
+		}
+		
+		
+		function init(){
+			//var myTimer = setInterval(draw, 400);
+			if (window.myTimer && anim_start==1) {
+				clearInterval(myTimer);
+				anim_start = 0;
+			}
+			else
+			{
+			myTimer = setInterval(draw, 0.1);
+			anim_start = 1;
+			}
+		};
+		
+			
+	</script>
+
+	<head>
+		<title>Методы сортировки</title>
+
+		<link rel='stylesheet' type='text/css' href='/style.css'>
+		<link rel="icon" href="/favicon.jpg">
+		<meta name="description" content="Методы сортировки">	
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="robots" content="index, follow">
+		<meta charset="utf-8">
+
+
+		
+	</head>
+
+	<body>
+			<header><h1>Методы сортировки</h1></header>
+		
+		<main>
+		
+		<top>
+			<hr>
+			<nav>
+				<div id = "bubble_butt">Пузырьковый</div>
+				<div id = "insert_butt">Вставками</div>
+			</nav>	
+		</top>
+		<hr>
+		<div id = "sortalg" onclick = "init();">
+		<canvas id = "canvas" width = "600" height = "300"></canvas>
+		</div>
+		<div id = "bubble-article">
+		<p>Алгоритм состоит из повторяющихся проходов по сортируемому массиву. За каждый проход элементы последовательно сравниваются попарно и, если порядок в паре неверный, выполняется перестановка элементов. Проходы по массиву повторяются N − 1 раз или до тех пор, пока на очередном проходе не окажется, что обмены больше не нужны, что означает — массив отсортирован. При каждом проходе алгоритма по внутреннему циклу очередной наибольший элемент массива ставится на своё место в конце массива рядом с предыдущим «наибольшим элементом», а наименьший элемент перемещается на одну позицию к началу массива («всплывает» до нужной позиции, как пузырёк в воде — отсюда и название алгоритма). </p>
+		<p>Особенность данного алгоритма заключается в следующем: после первого завершения внутреннего цикла максимальный элемент массива всегда находится на N-ой позиции. При втором проходе, следующий по значению максимальный элемент находится на N − 1 месте. И так далее. Таким образом, на каждом следующем проходе число обрабатываемых элементов уменьшается на 1 и нет необходимости «обходить» весь массив от начала до конца каждый раз.
+
+		<p>Так как подмассив из одного элемента не нуждается в сортировке, то для сортировки требуется делать не более N − 1 итераций внешнего цикла. Поэтому в некоторых реализациях внешний цикл всегда выполняется ровно N − 1 и не отслеживается, были или не были обмены на каждой итерации.</p>
+
+		<p>Введение индикатора (флажка F) действительно произошедших во внутреннем цикле обменов уменьшает число лишних проходов в случаях с частично отсортированными массивами на входе. Перед каждым проходом по внутреннему циклу флажок сбрасывается в 0, а после действительно произошедшего обмена устанавливается в 1. Если после выхода из внутреннего цикла флажок равен 0, то обменов не было, то есть массив отсортирован и можно досрочно выйти из программы сортировки. </p>
+		</div>
+		
+		<div id = "bubble-article">
+		<p>Сортировка вставками (англ. Insertion sort) — алгоритм сортировки, в котором элементы входной последовательности просматриваются по одному, и каждый новый поступивший элемент размещается в подходящее место среди ранее упорядоченных элементов.</p>
+		<p>В начальный момент отсортированная последовательность пуста. На каждом шаге алгоритма выбирается один из элементов входных данных и помещается на нужную позицию в уже отсортированной последовательности до тех пор, пока набор входных данных не будет исчерпан. В любой момент времени в отсортированной последовательности элементы удовлетворяют требованиям к выходным данным алгоритма.</p>
+
+		<p>Данный алгоритм можно ускорить при помощи использования бинарного поиска для нахождения места текущему элементу в отсортированной части. Проблема с долгим сдвигом массива вправо решается при помощи смены указателей. </p>
+		</div>
+		
+		<div id = "footer">
+		<hr>
+		&copy Александр Шалаев, 19АСв
+		</div>
+		</main>
+	</body>
+</html>
